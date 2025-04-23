@@ -1,0 +1,131 @@
+/* Horizontal gradient */
+.bg-gradient-horizontal {
+    background: linear-gradient(to right, #007bff, #00ff88);
+}
+
+/* Vertical gradient */
+.bg-gradient-vertical {
+    background: linear-gradient(to bottom, #007bff, #00ff88);
+}
+
+/* Diagonal gradient */
+.bg-gradient-diagonal {
+    background: linear-gradient(to bottom right, #007bff, #00ff88);
+}
+
+/* Radial gradient */
+.bg-gradient-radial {
+    background: radial-gradient(circle, #007bff, #00ff88);
+}
+
+/* Blue gradient */
+.bg-gradient-blue {
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
+}
+
+/* Purple gradient */
+.bg-gradient-purple {
+    background: linear-gradient(45deg, #4776E6, #8E54E9);
+}
+
+/* Red gradient */
+.bg-gradient-red {
+    background: linear-gradient(45deg, #ED213A, #93291E);
+}
+
+/* Orange gradient */
+.bg-gradient-orange {
+    background: linear-gradient(45deg, #FF8008, #FFC837);
+}
+
+/* Green gradient */
+.bg-gradient-green {
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+}
+
+/* Pink gradient */
+.bg-gradient-pink {
+    background: linear-gradient(45deg, #FF0099, #493240);
+}
+
+.bg-gradient-animated {
+    background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.text-gradient {
+    background: linear-gradient(to right, #007bff, #00ff88);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+/* button */
+.btn-gradient-blue {
+    background: linear-gradient(to right, #007bff, #00a1ff);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gradient-blue:hover {
+    background: linear-gradient(to right, #0069d9, #0088cc);
+    color: white;
+}
+
+.btn-gradient-purple {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    border: none;
+}
+
+.btn-gradient-purple:hover {
+    background: linear-gradient(to right, #4d0c9a, #1a5fd8);
+}
+
+/* gradient border */
+.gradient-border {
+    position: relative;
+    background: white;
+    border-radius: 5px;
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    border-radius: 7px;
+    z-index: -1;
+    animation: gradient-border-animation 20s linear infinite;
+}
+
+@keyframes gradient-border-animation {
+    0% {
+        background-position: 0 0;
+    }
+    50% {
+        background-position: 400% 0;
+    }
+    100% {
+        background-position: 0 0;
+    }
+}
