@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidebar Toggle Responsive</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="inc/css/style.css">
+  <link rel="stylesheet" href="inc/css/bootstrap-manual.css">
+  <link rel="stylesheet" href="inc/css/carousel.css">
+</head>
+<body>
+
+  <!-- Topbar -->
+  <nav class="navbar bg-gradient-green bg-gradient-horizontal text-white">
+    <button class="btn btn-outline-light mr-2" id="toggleSidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    <span class="navbar-brand mb-0 h1">
+      <i class="fas fa-hard-hat"></i> BisaBos
+    </span>
+  </nav>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="bg-gradient-green bg-gradient-vertical">
+    <!-- <div class="sidebar-header text-white">
+      <i class="fas fa-user-shield"></i> <span class="d-none d-md-inline">Admin</span>
+    </div> -->
+    <div class="list-group list-group-flush">
+      <a href="#" class="home list-group-item bg-gradient-green text-white active"><i class="fas fa-home mr-2"></i> <span class="d-none d-md-inline">Home</span></a>
+      <a href="#" class="service list-group-item bg-gradient-green text-white"><i class="fas fa-user-cog mr-2"></i> <span class="d-none d-md-inline">Services</span></a>
+      <a href="#" class="faq list-group-item bg-gradient-green text-white"><i class="fas fa-cogs mr-2"></i> <span class="d-none d-md-inline">Settings</span></a>
+      <a href="#" class="setting list-group-item bg-gradient-green text-white"><i class="fas fa-chart-bar mr-2"></i> <span class="d-none d-md-inline">Reports</span></a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+  
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="inc/js/service.js"></script>
+  <script>
+    document.write(
+      '<script src="inc/js/script.js?t=' + new Date().getTime() + '"><\/script>'
+    );
+  </script>
+
+</body>
+</html>
