@@ -1,0 +1,36 @@
+<style>
+    /* body {
+        background-color: #f9f9f9;
+    } */
+    .order-box {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 30px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="order-box">
+    <h3 class="text-center mb-4"><i class="fas fa-shopping-cart text-success"></i> Order Sekarang</h3>
+    <form id="orderForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama Anda</label>
+            <input type="text" class="form-control" id="name" placeholder="Contoh: Budi" required>
+        </div>
+        <div class="mb-3">
+            <label for="product" class="form-label">Service</label>
+            <!-- <input type="text" class="form-control" id="product" placeholder="Contoh: Kopi Arabica 1kg" required> -->
+             <select name="service" id="service" class="form-control">
+                <option value="" disabled selected>Pilih Service</option>
+             </select>
+        </div>
+        <button type="submit" class="btn bg-gradient-green text-white w-100">
+            <i class="fab fa-whatsapp"></i> Order via WhatsApp
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

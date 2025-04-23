@@ -83,6 +83,32 @@ menuItems.forEach(item => {
                         console.error('Gagal memuat data:', error);
                     });
                 }
+                if (pageName == 'order') {
+                    const form = document.getElementById('orderForm');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            const name = document.getElementById('name').value;
+                            const product = document.getElementById('service').value;
+                            const phone = "6285161141305";
+                            const msg = `Halo, saya ingin order\nNama : ${name}\nService : ${product}`;
+                            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+                            window.open(url, "_blank");
+                        });
+                    }
+                    fetch('json/service_list.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const select = document.getElementById('service');
+                        data.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.title;
+                            option.textContent = item.title;
+                            select.appendChild(option);
+                        });
+                    })
+                    .catch(err => console.error('Gagal mengambil data produk:', err));
+                }
             })
             .catch(error => {
                 console.error('Gagal memuat konten:', error);
