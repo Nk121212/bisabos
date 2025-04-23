@@ -1,0 +1,8 @@
+[
+    { "title": "Bangunan & Renovasi", "text": "Tukang bangunan harian/borongan, Renovasi rumah/kamar mandi/dapur, Pengecatan tembok, Pasang keramik, plafon, wallpaper, Tukang kayu (custom furniture, pintu, lemari)", "image":"image/service/builder.jpg", "footer":"Ini Footer"},
+    { "title": "Rumah Tangga", "text": "Bersih-bersih rumah/kos, Cuci AC dan perawatan AC, Cuci kendaraan (mobil/motor), Laundry kiloan/ekspres, Servis peralatan rumah tangga (kulkas, mesin cuci, dll), Tukang ledeng (perbaikan pipa, saluran mampet), Tukang listrik (instalasi, perbaikan)", "image":"image/service/house_worker.jpg", "footer":"Ini Footer"},
+    { "title": "Angkut & Kirim", "text": "Jasa angkut barang pindahan, Jasa kurir/antar jemput barang, Jasa ojek motor/mobil", "image":"image/service/builder.jpg", "footer":"Ini Footer"},
+    { "title": "Teknologi", "text": "Instal ulang laptop/PC, Servis hardware dan software, Setting WiFi dan jaringan, Pembuatan website sederhana, Jasa desain grafis", "image":"image/service/builder.jpg", "footer":"Ini Footer"},
+    { "title": "Umum & Harian", "text": "Pasang TV/LCD/Bracket, Pasang CCTV, Tambal ban panggilan, Jasa antrian (SIM, BPJS, dll), Jasa titip beli (makanan, barang)", "image":"image/service/builder.jpg", "footer":"Ini Footer"},
+    { "title": "Harian Lepas", "text": "Helper proyek, Kuli bongkar muat, Tenaga event (crew, penjaga stand), Satpam / sekuriti harian", "image":"image/service/builder.jpg", "footer":"Ini Footer"}
+]
