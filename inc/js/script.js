@@ -51,7 +51,7 @@ menuItems.forEach(item => {
         }
 
         var pageName = this.classList[0];
-        // console.log('pgName', pageName);
+        
         fetch('pages/'+this.classList[0]+'.html')
             .then(response => {
                 if (!response.ok) {
