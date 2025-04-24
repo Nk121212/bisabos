@@ -116,7 +116,7 @@ menuItems.forEach(item => {
         if(pageName == 'logout'){
             logout();
         }else{
-            fetch('pages/'+this.classList[0]+'.html')
+            fetch('pages/'+this.classList[0]+'.html?_=' + new Date().getTime())
             .then(response => {
                 if (!response.ok) {
                     return fetch('pages/not_found.html').then(res => res.text());
@@ -148,18 +148,7 @@ menuItems.forEach(item => {
                     });
                 }
                 if (pageName == 'order') {
-                    const form = document.getElementById('orderForm');
-                    if (form) {
-                        form.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            const name = document.getElementById('name').value;
-                            const product = document.getElementById('service').value;
-                            const phone = "6285161141305";
-                            const msg = `Halo, saya ingin order\nNama : ${name}\nService : ${product}`;
-                            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-                            window.open(url, "_blank");
-                        });
-                    }
+
                     fetch('json/service_list.json')
                     .then(response => response.json())
                     .then(data => {
@@ -172,6 +161,21 @@ menuItems.forEach(item => {
                         });
                     })
                     .catch(err => console.error('Gagal mengambil data produk:', err));
+
+                    const form = document.getElementById('orderForm');
+
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+                            const name = document.getElementById('name').value;
+                            const product = document.getElementById('service').value;
+                            const alamat = document.getElementById('alamat').value;
+                            const phone = "6285161141305";
+                            const msg = `Halo, saya ingin order\nNama : ${name}\nAlamat : ${alamat}\nService : ${product}`;
+                            const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+                            window.open(url, "_blank");
+                        });
+                    }
                 }
                 if(pageName == 'login'){
                     const form = document.getElementById('loginForm');
