@@ -1,18 +1,24 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // alert('a');
-    const link = document.querySelector('a.home');
-      
-    // Kalau link ditemukan, lakukan klik otomatis
-    if (link) {
-        link.click();
+
+    const linkHome = document.querySelector('a.home');
+    const linksHide = document.querySelectorAll('a.hidefirst');
+
+    linksHide.forEach(link => {
+        link.classList.add('d-none');
+    });
+        
+    if (linkHome) {
+        linkHome.click();
     }
+
+    checkToken();
+
 });
 
 const sidebar = document.getElementById('sidebar');
 const mainContent = document.getElementById('main-content');
 const toggleBtn = document.getElementById('toggleSidebar');
 
-// Check screen size on load
 function checkScreenSize() {
     if (window.innerWidth <= '768') {
         //disini jadi berubah fungsinya kalau di set classnya hidden jadi nya malah muncul jadi di balikan aja gini
@@ -21,6 +27,62 @@ function checkScreenSize() {
     } else {
         sidebar.classList.remove('hidden');
     }
+}
+
+function setWithExpiry(key, value, ttl) {
+    const now = new Date();
+
+    const item = {
+        value: value,
+        expiry: now.getTime() + ttl // ttl = time to live (dalam ms)
+    };
+
+    localStorage.setItem(key, JSON.stringify(item));
+}
+
+function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key);
+
+    if (!itemStr) return null;
+
+    const item = JSON.parse(itemStr);
+    const now = new Date();
+
+    if (now.getTime() > item.expiry) {
+        localStorage.removeItem(key);
+        return null;
+    }
+
+    return item.value;
+}
+
+function logout(){
+    localStorage.removeItem('userToken');
+    checkToken();
+}
+
+function checkToken(){
+
+    const linkLogin = document.querySelector('a.login');
+    const linkLogout = document.querySelector('a.logout');
+    const linkHome = document.querySelector('a.home');
+
+    const token = getWithExpiry('userToken');
+
+    if(token){
+        //hide sidebar menu sign in
+        linkLogin.classList.add('d-none');
+        linkLogout.classList.remove('d-none');
+    }else{
+        //hide sidebar menu sign out
+        linkLogout.classList.add('d-none');
+        linkLogin.classList.remove('d-none');
+    }
+
+    if(linkHome){
+        linkHome.click();
+    }
+
 }
 
 // Initial check
@@ -38,8 +100,8 @@ const menuItems = document.querySelectorAll('#sidebar .list-group-item');
 
 menuItems.forEach(item => {
     item.addEventListener('click', function () {
-    // Hapus 'active' dari semua menu
-    menuItems.forEach(el => el.classList.remove('active'));
+        // Hapus 'active' dari semua menu
+        menuItems.forEach(el => el.classList.remove('active'));
 
         // console.log(this.classList[0]);
         // Tambahkan 'active' ke yang diklik
@@ -51,8 +113,10 @@ menuItems.forEach(item => {
         }
 
         var pageName = this.classList[0];
-        
-        fetch('pages/'+this.classList[0]+'.html')
+        if(pageName == 'logout'){
+            logout();
+        }else{
+            fetch('pages/'+this.classList[0]+'.html')
             .then(response => {
                 if (!response.ok) {
                     return fetch('pages/not_found.html').then(res => res.text());
@@ -109,10 +173,44 @@ menuItems.forEach(item => {
                     })
                     .catch(err => console.error('Gagal mengambil data produk:', err));
                 }
+                if(pageName == 'login'){
+                    const form = document.getElementById('loginForm');
+                    if (form) {
+                        form.addEventListener('submit', function(e) {
+                            e.preventDefault();
+
+                            const form = e.target;
+                            const formData = new FormData(form);
+
+                            fetch('backend/login.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // document.getElementById('result').innerHTML = data;
+                                // alert(data.token);
+                                const token = getWithExpiry('userToken');
+                                if (token) {
+                                    // console.log('Token masih berlaku:', token);
+                                } else {
+                                    // console.log('Token expired atau tidak ada');
+                                    setWithExpiry('userToken', data.token, 3600000);
+                                    checkToken();
+
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        });
+                    }
+                }
             })
             .catch(error => {
                 console.error('Gagal memuat konten:', error);
             });
+        }
         
     });
 });

@@ -47,15 +47,3 @@ function renderPagination() {
     });
   });
 }
-
-// Load data via fetch
-// fetch('json/data.json')
-//   .then(response => response.json())
-//   .then(json => {
-//     data = json;
-//     renderCards(currentPage);
-//     renderPagination();
-//   })
-//   .catch(error => {
-//     console.error('Gagal memuat data:', error);
-// });
