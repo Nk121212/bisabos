@@ -128,7 +128,7 @@
                 <th>PIHAK KEDUA</th>
             </tr>
             <tr>
-                <td><br><br><br><br>( [Nama Pemberi Jasa] )</td>
+                <td><br><br><br><br>( Kahfi Setiawan )</td>
                 <td><br><br><br><br>( [Nama Penerima Jasa] )</td>
             </tr>
         </table>
@@ -154,33 +154,6 @@
         // // Tampilkan ke dalam elemen HTML
         // document.getElementById('nama').textContent = nama || 'Tidak ada nama';
         // document.getElementById('tanggal').textContent = tanggal || 'Tidak ada tanggal';
-        
-        function cetakBagian(elementId) {
-            const elemenYangAkanDicetak = document.getElementById(elementId);
-
-            if (elemenYangAkanDicetak) {
-                const jendelaCetak = window.open('', '_blank');
-                jendelaCetak.document.open();
-                jendelaCetak.document.write(`
-                <html>
-                <head>
-                    <title>Cetak Bagian</title>
-                    <style>
-                    /* Tambahkan gaya CSS khusus untuk cetakan di sini jika perlu */
-                    </style>
-                </head>
-                <body>
-                    ${elemenYangAkanDicetak.innerHTML}
-                </body>
-                </html>
-                `);
-                jendelaCetak.document.close();
-                jendelaCetak.print();
-                jendelaCetak.close();
-            } else {
-                alert(`Elemen dengan ID "${elementId}" tidak ditemukan.`);
-            }
-        }
 
         function downloadPDF() {
             const htmlContent = document.getElementById('cetakIni').innerHTML;

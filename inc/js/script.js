@@ -168,12 +168,47 @@ menuItems.forEach(item => {
                         form.addEventListener('submit', function(e) {
                             e.preventDefault();
                             const name = document.getElementById('name').value;
-                            const product = document.getElementById('service').value;
+                            const ktp = document.getElementById('ktp').value;
+                            const service = document.getElementById('service').value;
                             const alamat = document.getElementById('alamat').value;
+                            const kota = document.getElementById('kota').value;
+                            const detail = document.getElementById('detail').value;
                             const phone = "6285161141305";
-                            const msg = `Halo, saya ingin order\nNama : ${name}\nAlamat : ${alamat}\nService : ${product}`;
+                            const msg = `Halo, saya ingin order\nNama : ${name}\nAlamat : ${alamat}\nService : ${service}`;
                             const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-                            window.open(url, "_blank");
+                            // window.open(url, "_blank");
+                            const data = {
+                                name: name,
+                                ktp: ktp,
+                                service: service,
+                                kota: kota,
+                                alamat: alamat,
+                                detail: detail
+                            };
+            
+                            // Kirim data ke PHP untuk disimpan
+                            fetch('backend/save_order.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            .then(response => response.json())
+                            .then(result => {
+                                if (result.status === 'success') {
+                                    console.log('Data order berhasil disimpan!');
+                                    // Setelah data disimpan, buka tautan WhatsApp
+                                    window.open(url, "_blank");
+                                    form.reset(); // Bersihkan form setelah berhasil (opsional)
+                                } else {
+                                    alert('Gagal menyimpan data order: ' + result.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Terjadi kesalahan saat mengirim data.');
+                            });
                         });
                     }
                 }

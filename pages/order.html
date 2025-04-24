@@ -20,15 +20,31 @@
             <input type="text" class="form-control" id="name" placeholder="" required>
         </div>
         <div class="mb-3">
-            <label for="product" class="form-label">Service</label>
+            <label for="ktp" class="form-label">No KTP</label>
+            <input type="number" class="form-control" id="ktp" placeholder="" required>
+        </div>
+        <div class="mb-3">
+            <label for="service" class="form-label">Service</label>
             <!-- <input type="text" class="form-control" id="product" placeholder="Contoh: Kopi Arabica 1kg" required> -->
              <select name="service" id="service" class="form-control">
                 <option value="" disabled selected>Pilih Service</option>
              </select>
         </div>
         <div class="mb-3">
-            <label for="name" class="form-label">Alamat</label>
+            <label for="kota" class="form-label">Kota</label>
+            <!-- <input type="text" class="form-control" id="product" placeholder="Contoh: Kopi Arabica 1kg" required> -->
+             <select name="kota" id="kota" class="form-control">
+                <option value="" disabled selected>Pilih Kota</option>
+                <option value="sumedang">Sumedang</option>
+             </select>
+        </div>
+        <div class="mb-3">
+            <label for="alamat" class="form-label">Alamat Lengkap</label>
             <textarea name="alamat" id="alamat" class="form-control" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="detail" class="form-label">Detail Order</label>
+            <textarea name="detail" id="detail" class="form-control" required></textarea>
         </div>
         <button type="submit" class="btn bg-gradient-green text-white w-100">
             <i class="fab fa-whatsapp"></i> Order via WhatsApp
