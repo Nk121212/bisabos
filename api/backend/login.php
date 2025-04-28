@@ -1,4 +1,5 @@
 <?php
+echo "Include Path: " . get_include_path() . "\n";
 
 header('Content-Type: application/json');
 
