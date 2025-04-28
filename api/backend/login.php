@@ -1,5 +1,6 @@
 <?php
-echo "Include Path: " . get_include_path() . "\n";
+
+var_dump($_SERVER['REQUEST_METHOD']);
 
 header('Content-Type: application/json');
 
