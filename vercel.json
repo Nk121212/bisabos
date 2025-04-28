@@ -1,5 +1,5 @@
 {
     "functions": {
-      "backend/**/*.php": { "runtime": "vercel-php@0.7.3" }
+      "api/backend/**/*.php": { "runtime": "vercel-php@0.7.3" }
     }
 }

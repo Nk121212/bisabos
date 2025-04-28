@@ -158,7 +158,7 @@
         function downloadPDF() {
             const htmlContent = document.getElementById('cetakIni').innerHTML;
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '../backend/generate_pdf.php', true);
+            xhr.open('POST', 'api/backend/generate_pdf.php', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.responseType = 'blob'; // Penting untuk menerima data biner (PDF)
 
