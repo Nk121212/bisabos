@@ -1,0 +1,33 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+    }
+    .pagination-container {
+        margin-top: 10px;
+    }
+    .pagination-button {
+        padding: 5px 10px;
+        margin-right: 5px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+    }
+    .pagination-button.active {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<div class="table-responsive">
+    <table id="table_order" class="table-bordered">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<div id="pagination" class="pagination-container"></div>

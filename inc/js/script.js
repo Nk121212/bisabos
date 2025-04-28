@@ -19,15 +19,13 @@ const sidebar = document.getElementById('sidebar');
 const mainContent = document.getElementById('main-content');
 const toggleBtn = document.getElementById('toggleSidebar');
 
-function checkScreenSize() {
-    if (window.innerWidth <= '768') {
-        //disini jadi berubah fungsinya kalau di set classnya hidden jadi nya malah muncul jadi di balikan aja gini
-        sidebar.classList.add('hidden');
-        sidebar.classList.remove('hidden');
-    } else {
-        sidebar.classList.remove('hidden');
-    }
-}
+let table;
+let thead;
+let tbody;
+let paginationDiv;
+const rowsPerPage = 5;
+// let currentPage = 1;
+let allData = [];
 
 function setWithExpiry(key, value, ttl) {
     const now = new Date();
@@ -66,6 +64,8 @@ function checkToken(){
     const linkLogin = document.querySelector('a.login');
     const linkLogout = document.querySelector('a.logout');
     const linkHome = document.querySelector('a.home');
+    const linkOrder = document.querySelector('a.order');
+    const linkOrderAdmin = document.querySelector('a.order_admin');
 
     const token = getWithExpiry('userToken');
 
@@ -73,10 +73,23 @@ function checkToken(){
         //hide sidebar menu sign in
         linkLogin.classList.add('d-none');
         linkLogout.classList.remove('d-none');
+
+        if (linkOrder) {
+            linkOrder.classList.remove('order');
+            linkOrder.className = 'order_admin ' + linkOrder.className.trim();
+            linkOrder.className = linkOrder.className.trimStart();
+        }
+
     }else{
         //hide sidebar menu sign out
         linkLogout.classList.add('d-none');
         linkLogin.classList.remove('d-none');
+
+        if (linkOrderAdmin) {
+            linkOrder.classList.remove('order_admin');
+            linkOrder.className = 'order ' + linkOrder.className.trim();
+            linkOrder.className = linkOrder.className.trimStart();
+        }
     }
 
     if(linkHome){
@@ -85,34 +98,108 @@ function checkToken(){
 
 }
 
+function displayTable(data, page) {
+    tbody.innerHTML = ''; // Kosongkan isi tabel sebelum menampilkan data baru
+    const startIndex = (page - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const paginatedData = data.slice(startIndex, endIndex);
+
+    if (paginatedData.length === 0 && data.length > 0) {
+        // Jika halaman saat ini kosong tetapi ada data, kembali ke halaman terakhir
+        currentPage = Math.ceil(data.length / rowsPerPage);
+        displayTable(data, currentPage);
+        return;
+    }
+
+    paginatedData.forEach(item => {
+        const row = tbody.insertRow();
+        for (const key in item) {
+        const cell = row.insertCell();
+        cell.textContent = item[key];
+        }
+    });
+}
+
+function displayPagination(data) {
+    paginationDiv.innerHTML = ''; // Kosongkan tombol pagination sebelumnya
+    const pageCount = Math.ceil(data.length / rowsPerPage);
+
+    for (let i = 1; i <= pageCount; i++) {
+        const button = document.createElement('button');
+        button.classList.add('pagination-button');
+        button.textContent = i;
+        if (i === currentPage) {
+        button.classList.add('active');
+        }
+        button.addEventListener('click', () => {
+        currentPage = i;
+        displayTable(data, currentPage);
+        updateActiveButton();
+        });
+        paginationDiv.appendChild(button);
+    }
+}
+
+function updateActiveButton() {
+    const buttons = document.querySelectorAll('.pagination-button');
+    buttons.forEach(button => {
+        button.classList.remove('active');
+        if (parseInt(button.textContent) === currentPage) {
+        button.classList.add('active');
+        }
+    });
+}
+
+function populateTableHeader(data) {
+    if (data.length > 0) {
+        const headers = Object.keys(data[0]);
+        const headerRow = thead.insertRow();
+        headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+        });
+    }
+}
+
+function checkScreenSize() {
+    if (window.innerWidth <= '768') {
+        //disini jadi berubah fungsinya kalau di set classnya hidden jadi nya malah muncul jadi di balikan aja gini
+        sidebar.classList.remove('hidden');
+    } else {
+        sidebar.classList.remove('hidden');
+    }
+}
+
 // Initial check
 checkScreenSize();
 
 // Add event listener for window resize
 window.addEventListener('resize', checkScreenSize);
 
-// Toggle sidebar
+// Toggle sidebar --> ketika di klik button toggle (garis 3 menu sidebar)
 toggleBtn.addEventListener('click', () => {
+    // alert('clicked');
     sidebar.classList.toggle('hidden');
 });
 
 const menuItems = document.querySelectorAll('#sidebar .list-group-item');
 
 menuItems.forEach(item => {
+
     item.addEventListener('click', function () {
+
+        if (window.innerWidth <= '768') {
+            sidebar.classList.remove('hidden');
+        }
+
         // Hapus 'active' dari semua menu
         menuItems.forEach(el => el.classList.remove('active'));
 
-        // console.log(this.classList[0]);
-        // Tambahkan 'active' ke yang diklik
         this.classList.add('active');
 
-        // Auto close sidebar on mobile after clicking menu item
-        if (window.innerWidth <= 768) {
-            sidebar.classList.add('hidden');
-        }
-
         var pageName = this.classList[0];
+
         if(pageName == 'logout'){
             logout();
         }else{
@@ -136,7 +223,7 @@ menuItems.forEach(item => {
                 }
                 if(pageName == 'service'){
                     // Load data via fetch
-                    fetch('json/service_list.json')
+                    fetch('json/service_list.json?_=' + new Date().getTime())
                     .then(response => response.json())
                     .then(json => {
                         data = json;
@@ -149,7 +236,7 @@ menuItems.forEach(item => {
                 }
                 if (pageName == 'order') {
 
-                    fetch('json/service_list.json')
+                    fetch('json/service_list.json?_=' + new Date().getTime())
                     .then(response => response.json())
                     .then(data => {
                         const select = document.getElementById('service');
@@ -174,7 +261,7 @@ menuItems.forEach(item => {
                             const kota = document.getElementById('kota').value;
                             const detail = document.getElementById('detail').value;
                             const phone = "6285161141305";
-                            const msg = `Halo, saya ingin order\nNama : ${name}\nAlamat : ${alamat}\nService : ${service}`;
+                            const msg = `Halo, saya ingin order\nNama : ${name}\nNo KTP : ${ktp}\nKota : ${kota}\nAlamat : ${alamat}\nService : ${service}\nDetail : ${detail}`;
                             const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
                             // window.open(url, "_blank");
                             const data = {
@@ -244,6 +331,36 @@ menuItems.forEach(item => {
                             });
                         });
                     }
+                }
+                if(pageName == 'order_admin'){
+                    // Inisialisasi DataTables setelah konten order_admin.html dimuat
+                    $(document).ready(function() {
+                        $('#table_order').DataTable({
+                            ajax: {
+                                url: 'json/data_order.json?_=' + new Date().getTime(),
+                                dataSrc: ''
+                            },
+                            columns: [
+                                { data: 'name', title: 'Nama' },
+                                { data: 'ktp', title: 'KTP' },
+                                { data: 'service', title: 'Service' },
+                                { data: 'kota', title: 'Kota' },
+                                { data: 'alamat', title: 'Alamat' },
+                                { data: 'detail', title: 'Detail' },
+                                { 
+                                    data: 'ktp',
+                                    title: 'Action', 
+                                    render: function ( data, type, row ) {
+                                        return data;
+                                    }
+                                }
+                            ],
+                            // language: {
+                            //     url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json'
+                            // }
+                            // ... (opsi DataTables lainnya)
+                        });
+                    });
                 }
             })
             .catch(error => {
