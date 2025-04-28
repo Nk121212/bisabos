@@ -274,7 +274,7 @@ menuItems.forEach(item => {
                             };
             
                             // Kirim data ke PHP untuk disimpan
-                            fetch('backend/save_order.php', {
+                            fetch('../backend/save_order.php', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -308,7 +308,7 @@ menuItems.forEach(item => {
                             const form = e.target;
                             const formData = new FormData(form);
 
-                            fetch('backend/login.php', {
+                            fetch('../backend/login.php', {
                                 method: 'POST',
                                 body: formData
                             })
