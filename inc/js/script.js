@@ -190,6 +190,8 @@ function numberToIDR(amount = 0){
         minimumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
         maximumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
       }).format(amount);
+
+      return formattedIDR;
 }
 
 // Initial check
