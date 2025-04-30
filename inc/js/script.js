@@ -13,6 +13,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
     checkToken();
 
+    const formPerjanjian = document.getElementById('perjanjianForm');
+                    
+    if (formPerjanjian) {
+        formPerjanjian.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const total = document.getElementById('total').value;
+            const startDate = document.getElementById('startDateValue').value;
+            const endDate = document.getElementById('endDateValue').value;
+            const maxLate = document.getElementById('maxLate').value;
+            const nominalDenda = document.getElementById('nominalDenda').value;
+            const param = document.getElementById('param').value;
+            // const newParams = 'start_date='+startDate+'&end_date='+endDate+'maxlate='+maxLate+'&denda='+nominalDenda;
+            const data = {
+                total: total,
+                start_date: startDate,
+                end_date: endDate,
+                maxlate: maxLate,
+                denda: nominalDenda
+            };
+
+            const rowJsonString = JSON.stringify(data);
+            const decodeData = btoa(rowJsonString);
+            const base64EncodedRow = encodeURIComponent(decodeData);
+            const newPdfUrl = param+'&param2='+base64EncodedRow;
+            // console.log(startDate, endDate, maxLate, nominalDenda, param, newPdfUrl);
+            const url = newPdfUrl;
+            window.open(url, "_blank");
+        });
+    }
+
+    $('#startDate').datetimepicker({
+        format: 'YYYY-MM-DD'
+    });
+
+    $('#endDate').datetimepicker({
+        format: 'YYYY-MM-DD'
+    });
+
 });
 
 const sidebar = document.getElementById('sidebar');
@@ -29,22 +67,10 @@ if (toggleBtn && sidebar && mainContent && tableElement) {
         // tableElement.style.width = '100%';
     });
 
-    // Atur lebar awal tabel saat halaman dimuat (opsional, CSS width: 100% biasanya cukup)
-    // document.addEventListener('DOMContentLoaded', () => {
-    //     tableElement.style.width = '100%';
-    // });
-
     window.addEventListener('resize', () => {
         tableElement.style.width = '100%';
     });
 }
-// let table;
-// let thead;
-// let tbody;
-// let paginationDiv;
-// const rowsPerPage = 5;
-// // let currentPage = 1;
-// let allData = [];
 
 function setWithExpiry(key, value, ttl) {
     const now = new Date();
@@ -118,70 +144,6 @@ function checkToken(){
 
 }
 
-// function displayTable(data, page) {
-//     tbody.innerHTML = ''; // Kosongkan isi tabel sebelum menampilkan data baru
-//     const startIndex = (page - 1) * rowsPerPage;
-//     const endIndex = startIndex + rowsPerPage;
-//     const paginatedData = data.slice(startIndex, endIndex);
-
-//     if (paginatedData.length === 0 && data.length > 0) {
-//         // Jika halaman saat ini kosong tetapi ada data, kembali ke halaman terakhir
-//         currentPage = Math.ceil(data.length / rowsPerPage);
-//         displayTable(data, currentPage);
-//         return;
-//     }
-
-//     paginatedData.forEach(item => {
-//         const row = tbody.insertRow();
-//         for (const key in item) {
-//         const cell = row.insertCell();
-//         cell.textContent = item[key];
-//         }
-//     });
-// }
-
-// function displayPagination(data) {
-//     paginationDiv.innerHTML = ''; // Kosongkan tombol pagination sebelumnya
-//     const pageCount = Math.ceil(data.length / rowsPerPage);
-
-//     for (let i = 1; i <= pageCount; i++) {
-//         const button = document.createElement('button');
-//         button.classList.add('pagination-button');
-//         button.textContent = i;
-//         if (i === currentPage) {
-//         button.classList.add('active');
-//         }
-//         button.addEventListener('click', () => {
-//         currentPage = i;
-//         displayTable(data, currentPage);
-//         updateActiveButton();
-//         });
-//         paginationDiv.appendChild(button);
-//     }
-// }
-
-// function updateActiveButton() {
-//     const buttons = document.querySelectorAll('.pagination-button');
-//     buttons.forEach(button => {
-//         button.classList.remove('active');
-//         if (parseInt(button.textContent) === currentPage) {
-//         button.classList.add('active');
-//         }
-//     });
-// }
-
-// function populateTableHeader(data) {
-//     if (data.length > 0) {
-//         const headers = Object.keys(data[0]);
-//         const headerRow = thead.insertRow();
-//         headers.forEach(headerText => {
-//         const th = document.createElement('th');
-//         th.textContent = headerText;
-//         headerRow.appendChild(th);
-//         });
-//     }
-// }
-
 function checkScreenSize() {
     if (window.innerWidth <= '768') {
         //disini jadi berubah fungsinya kalau di set classnya hidden jadi nya malah muncul jadi di balikan aja gini
@@ -206,6 +168,28 @@ function showLoginError(errorMessage) {
     } else {
         console.error("Elemen modal error login tidak ditemukan.");
     }
+}
+
+function showPerjanjianModal(url) {
+    const modalId = document.getElementById('PerjanjianModal');
+
+    const modalBody = document.querySelector('#PerjanjianModal .modal-body');
+    const paramInput = modalBody.querySelector('#param');
+
+    paramInput.value = url;
+
+    const modal = new bootstrap.Modal(modalId);
+
+    modal.show();
+}
+
+function numberToIDR(amount = 0){
+    const formattedIDR = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
+        maximumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
+      }).format(amount);
 }
 
 // Initial check
@@ -407,21 +391,18 @@ menuItems.forEach(item => {
                                     render: function ( data, type, row ) {
 
                                         const rowJsonString = JSON.stringify(row);
-
-                                        // 2. Base64 encode string JSON
                                         const base64EncodedRow = btoa(rowJsonString);
 
                                         // 3. Buat URL dengan parameter Base64 encoded
                                         const pdfUrl = `pages/surat_perjanjian.html?param=${encodeURIComponent(base64EncodedRow)}`;
 
-                                        
-                                        return '<a href="'+pdfUrl+'" target="_blank" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</a>';
-                                        // return data;
+                                        return `<a href="#" onclick="showPerjanjianModal('${pdfUrl}')" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</a>`;
                                     }
                                 }
                             ]
                         });
                     });
+
                 }
             })
             .catch(error => {

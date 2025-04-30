@@ -93,18 +93,18 @@
         <em id="detail">[Deskripsikan layanan secara jelas, misal: Perbaikan instalasi listrik rumah tangga, dll]</em></p>
 
         <div class="pasal">PASAL 2 - JANGKA WAKTU</div>
-        <p class="indent">Perjanjian ini berlaku sejak tanggal <strong>[tanggal mulai]</strong> sampai dengan <strong>[tanggal selesai]</strong>, atau sampai pekerjaan diselesaikan sesuai kesepakatan kedua belah pihak.</p>
+        <p class="indent">Perjanjian ini berlaku sejak tanggal <strong id="startDate">[tanggal mulai]</strong> sampai dengan <strong id="endDate">[tanggal selesai]</strong>. Sesuai kesepakatan kedua belah pihak.</p>
 
         <div class="pasal">PASAL 3 - PEMBAYARAN</div>
         <ol class="indent">
-        <li><strong>PIHAK KEDUA</strong> wajib membayar kepada <strong>PIHAK PERTAMA</strong> sebesar <strong>50%</strong> dari <strong>Rp [jumlah nominal]</strong> sebagai uang muka sebelum mulai pengerjaan.</li>
+        <li><strong>PIHAK KEDUA</strong> wajib membayar kepada <strong>PIHAK PERTAMA</strong> sebesar <strong>50%</strong> dari <strong id="total">Rp [jumlah nominal]</strong> atau sebesar <strong id="halfTotal"></strong> sebagai uang muka sebelum mulai pengerjaan.</li>
         <li>Pembayaran sisanya <strong>(50%)</strong> lagi, dilakukan secara:
             <ul>
             <li>☐ Tunai setelah pekerjaan selesai</li>
             <li>☐ Transfer ke rekening [Bank], No rekening : [No Rek]</li>
             </ul>
         </li>
-        <li>Jika terjadi keterlambatan lebih dari <strong>[jumlah hari]</strong> hari, maka dikenakan denda sebesar <strong>Rp [jumlah denda]</strong> per hari keterlambatan.</li>
+        <li>Jika terjadi keterlambatan pembayaran lebih dari <strong id="maxLate">[jumlah hari]</strong> hari, maka dikenakan denda sebesar <strong id="nominalDenda">Rp [jumlah denda]</strong> per hari keterlambatan.</li>
         </ol>
 
         <div class="pasal">PASAL 4 - KEWAJIBAN & TANGGUNG JAWAB</div>
@@ -143,11 +143,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script>
+
+    function numberToIDR(amount = 0){
+        const formattedIDR = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
+            maximumFractionDigits: 0, // Menghilangkan desimal jika tidak ada
+        }).format(amount);
+        return formattedIDR;
+    }
         // Ambil semua parameter dari URL
         const params = new URLSearchParams(window.location.search);
+
         const param = params.get('param');
         const decodeParam = atob(param);
         const jsonParam = JSON.parse(decodeParam);
+
+        const param2 = params.get('param2');
+        const decodeParam2 = atob(param2);
+        const jsonParam2 = JSON.parse(decodeParam2);
+
+        console.log(param2, decodeParam2, jsonParam2, jsonParam2.maxlate);
 
         const now = new Date();
         const tahun = now.getFullYear();
@@ -160,12 +177,11 @@
         const namaHariIndonesia = [
         "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
         ];
+
         const namaBulanIndonesia = [
         "Januari", "Februari", "Maret", "April", "Mei", "Juni",
         "Juli", "Agustus", "September", "Oktober", "November", "Desember"
         ];
-
-        console.log(decodeParam, jsonParam);
 
         document.getElementById('noSurat').textContent = tahun+bulan+tanggal+jam+menit+detik || 'Tidak ada no surat';
         document.getElementById('hariIni').textContent = namaHariIndonesia[now.getDay()] || '';
@@ -179,6 +195,37 @@
         document.getElementById('alamat').textContent = jsonParam.alamat || 'Tidak ada alamat';
         document.getElementById('ktp').textContent = jsonParam.ktp || 'Tidak ada ktp';
         document.getElementById('detail').textContent = jsonParam.detail || 'Tidak ada detail';
+
+        const dateStart = jsonParam2.start_date;
+        const dayStart = new Date(dateStart);
+        const dayStartName = namaHariIndonesia[dayStart.getDay()];
+        const dateStartParts = dateStart.split('-');
+
+        const yearStartNumber = parseInt(dateStartParts[0]);
+        const monthStartNumber = parseInt(dateStartParts[1]);
+        const dateStartNumber = parseInt(dateStartParts[2]);
+
+        const dateEnd = jsonParam2.end_date;
+        const dayEnd = new Date(dateEnd);
+        const dayEndName = namaHariIndonesia[dayEnd.getDay()];
+        const dateEndParts = dateEnd.split('-');
+
+        const yearEndNumber = parseInt(dateEndParts[0]);
+        const monthEndNumber = parseInt(dateEndParts[1]);
+        const dateEndNumber = parseInt(dateEndParts[2]);
+
+
+        const angka = jsonParam2.total;
+        const persentase = 50;
+
+        const halfTotal = (persentase / 100) * angka;
+
+        document.getElementById('total').textContent = numberToIDR(jsonParam2.total) || 'Tidak ada total';
+        document.getElementById('startDate').textContent = dayStartName+', '+ dateStartNumber+' '+namaBulanIndonesia[monthStartNumber]+ ' '+yearStartNumber  || 'Tidak ada start';
+        document.getElementById('endDate').textContent = dayEndName+', '+ dateEndNumber+' '+namaBulanIndonesia[monthEndNumber]+ ' '+yearStartNumber  || 'Tidak ada end';
+        document.getElementById('maxLate').textContent = jsonParam2.maxlate || 'Tidak ada max late';
+        document.getElementById('nominalDenda').textContent = 'Rp '+jsonParam2.denda || 'Tidak ada denda';
+        document.getElementById('halfTotal').textContent = numberToIDR(halfTotal) || 'Tidak ada total';
 
         function downloadHTMLasPDF() {
             // const element = document.body; // Atau elemen HTML spesifik yang ingin Anda konversi
