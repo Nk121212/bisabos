@@ -44,9 +44,9 @@
     <div id="cetakIni" style="font-family: 'Times New Roman', Times, serif;">
 
         <h3 style="text-align:center;">SURAT PERJANJIAN KERJA SAMA JASA</h3>
-        <h4 style="text-align:center;">Nomor: [Nomor Surat, jika ada]</h4>
+        <h4 style="text-align:center;" id="noSurat">Nomor: [Nomor Surat, jika ada]</h4>
 
-        <p style="margin-top:2rem;">Pada hari ini, <strong>[hari]</strong>, tanggal <strong>[tanggal lengkap]</strong>, kami yang bertanda tangan di bawah ini:</p>
+        <p style="margin-top:2rem;">Pada hari <strong id="hariIni">[hari]</strong>, <strong id="tglIni">[tanggal lengkap]</strong>, kami yang bertanda tangan di bawah ini:</p>
 
         <table style="width:100%;">
             <tr>
@@ -69,15 +69,15 @@
         <table style="width:100%;">
             <tr>
                 <td style="width:50%;">Nama :</td>
-                <td>[Nama Penerima Jasa]</td>
+                <td id="nama"></td>
             </tr>
             <tr>
                 <td>Alamat :</td>
-                <td>[Alamat Penerima Jasa]</td>
+                <td id="alamat">[Alamat Penerima Jasa]</td>
             </tr>
             <tr>
                 <td>Nomor KTP :</td>
-                <td>[Nomor KTP Penerima Jasa]</td>
+                <td id="ktp">[Nomor KTP Penerima Jasa]</td>
             </tr>
             <tr>
                 <td>Selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong></td>
@@ -90,7 +90,7 @@
 
         <div class="pasal">PASAL 1 - LINGKUP PEKERJAAN</div>
         <p class="indent">PIHAK PERTAMA bersedia memberikan layanan jasa berupa: <br>
-        <em>[Deskripsikan layanan secara jelas, misal: Perbaikan instalasi listrik rumah tangga, dll]</em></p>
+        <em id="detail">[Deskripsikan layanan secara jelas, misal: Perbaikan instalasi listrik rumah tangga, dll]</em></p>
 
         <div class="pasal">PASAL 2 - JANGKA WAKTU</div>
         <p class="indent">Perjanjian ini berlaku sejak tanggal <strong>[tanggal mulai]</strong> sampai dengan <strong>[tanggal selesai]</strong>, atau sampai pekerjaan diselesaikan sesuai kesepakatan kedua belah pihak.</p>
@@ -101,7 +101,7 @@
         <li>Pembayaran dilakukan secara:
             <ul>
             <li>☐ Tunai setelah pekerjaan selesai</li>
-            <li>☐ Transfer ke rekening [Nama Bank & Nomor Rekening]</li>
+            <li>☐ Transfer ke rekening [Bank], No rekening : [No Rek]</li>
             <li>☐ [Metode lain, jika ada]</li>
             </ul>
         </li>
@@ -120,7 +120,7 @@
         <div class="pasal">PASAL 6 - PENUTUP</div>
         <p class="indent">Surat ini dibuat rangkap dua dan ditandatangani kedua pihak tanpa paksaan dari pihak manapun.</p>
 
-        <p style="margin-top:3rem;"><strong>[Kota]</strong>, <strong>[Tanggal]</strong></p>
+        <p style="margin-top:3rem;"><strong id="kota">[Kota]</strong>, <strong id="tglIniTtd">[Tanggal]</strong></p>
 
         <table style="width:100%;text-align:center;margin-top:3rem;">
             <tr>
@@ -129,7 +129,7 @@
             </tr>
             <tr>
                 <td><br><br><br><br>( Kahfi Setiawan )</td>
-                <td><br><br><br><br>( [Nama Penerima Jasa] )</td>
+                <td id="namaTtd">[Nama Penerima Jasa]</td>
             </tr>
         </table>
 
@@ -146,29 +146,46 @@
     <script>
         // Ambil semua parameter dari URL
         const params = new URLSearchParams(window.location.search);
-        const nama = params.get('nama');
-        console.log(params, nama);
+        const param = params.get('param');
+        const decodeParam = atob(param);
+        const jsonParam = JSON.parse(decodeParam);
 
-        // // Ambil nilai berdasarkan key
-        // const nama = params.get('nama');
-        // const tanggal = params.get('tanggal');
+        const now = new Date();
+        const tahun = now.getFullYear();
+        const bulan = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+        const tanggal = String(now.getDate()).padStart(2, '0');
+        const jam = String(now.getHours()).padStart(2, '0');
+        const menit = String(now.getMinutes()).padStart(2, '0');
+        const detik = String(now.getSeconds()).padStart(2, '0');
 
+        const namaHariIndonesia = [
+        "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
+        ];
+        const namaBulanIndonesia = [
+        "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        console.log(decodeParam, jsonParam);
+
+        document.getElementById('noSurat').textContent = tahun+bulan+tanggal+jam+menit+detik || 'Tidak ada no surat';
+        document.getElementById('hariIni').textContent = namaHariIndonesia[now.getDay()] || '';
+        document.getElementById('tglIni').textContent = tanggal+' '+namaBulanIndonesia[now.getMonth()]+' '+tahun || '';
+        document.getElementById('kota').textContent = 'Sumedang' || '';
+        document.getElementById('tglIniTtd').textContent = tanggal+' '+namaBulanIndonesia[now.getMonth()]+' '+tahun || '';
+        document.getElementById('namaTtd').innerHTML = '<br><br><br><br>( '+jsonParam.name+' )' || 'Tidak ada nama';
+        
         // // Tampilkan ke dalam elemen HTML
-        // document.getElementById('nama').textContent = nama || 'Tidak ada nama';
-        // document.getElementById('tanggal').textContent = tanggal || 'Tidak ada tanggal';
+        document.getElementById('nama').textContent = jsonParam.name || 'Tidak ada nama';
+        document.getElementById('alamat').textContent = jsonParam.alamat || 'Tidak ada alamat';
+        document.getElementById('ktp').textContent = jsonParam.ktp || 'Tidak ada ktp';
+        document.getElementById('detail').textContent = jsonParam.detail || 'Tidak ada detail';
 
         function downloadHTMLasPDF() {
             // const element = document.body; // Atau elemen HTML spesifik yang ingin Anda konversi
             const element = document.getElementById('cetakIni');
 
             const namaFileDasar = 'surat_perjanjian_';
-            const now = new Date();
-            const tahun = now.getFullYear();
-            const bulan = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
-            const tanggal = String(now.getDate()).padStart(2, '0');
-            const jam = String(now.getHours()).padStart(2, '0');
-            const menit = String(now.getMinutes()).padStart(2, '0');
-            const detik = String(now.getSeconds()).padStart(2, '0');
 
             // Membuat nama file dengan format namafile_YYYYMMDD_HHMMSS
             const namaFileLengkap = `${namaFileDasar}_${tahun}${bulan}${tanggal}_${jam}${menit}${detik}.pdf`;

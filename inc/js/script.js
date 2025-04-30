@@ -18,14 +18,33 @@ document.addEventListener('DOMContentLoaded', function () {
 const sidebar = document.getElementById('sidebar');
 const mainContent = document.getElementById('main-content');
 const toggleBtn = document.getElementById('toggleSidebar');
+const tableElement = document.getElementById('table_order');
 
-let table;
-let thead;
-let tbody;
-let paginationDiv;
-const rowsPerPage = 5;
-// let currentPage = 1;
-let allData = [];
+if (toggleBtn && sidebar && mainContent && tableElement) {
+    toggleBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('hidden');
+        // Atur ulang lebar tabel setelah sidebar di-toggle
+        tableElement.style.width = mainContent.offsetWidth + 'px';
+        // Atau mungkin lebih baik menggunakan width: '100%' dan biarkan table-responsive bekerja
+        // tableElement.style.width = '100%';
+    });
+
+    // Atur lebar awal tabel saat halaman dimuat (opsional, CSS width: 100% biasanya cukup)
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     tableElement.style.width = '100%';
+    // });
+
+    window.addEventListener('resize', () => {
+        tableElement.style.width = '100%';
+    });
+}
+// let table;
+// let thead;
+// let tbody;
+// let paginationDiv;
+// const rowsPerPage = 5;
+// // let currentPage = 1;
+// let allData = [];
 
 function setWithExpiry(key, value, ttl) {
     const now = new Date();
@@ -64,8 +83,9 @@ function checkToken(){
     const linkLogin = document.querySelector('a.login');
     const linkLogout = document.querySelector('a.logout');
     const linkHome = document.querySelector('a.home');
-    const linkOrder = document.querySelector('a.order');
-    const linkOrderAdmin = document.querySelector('a.order_admin');
+    // const linkOrder = document.querySelector('a.order');
+    const linkOrder = document.getElementById('linkOrder');
+    // const linkOrderAdmin = document.querySelector('a.order_admin');
 
     const token = getWithExpiry('userToken');
 
@@ -84,8 +104,8 @@ function checkToken(){
         //hide sidebar menu sign out
         linkLogout.classList.add('d-none');
         linkLogin.classList.remove('d-none');
-
-        if (linkOrderAdmin) {
+        // console.log('order_admin exist');
+        if (linkOrder) {
             linkOrder.classList.remove('order_admin');
             linkOrder.className = 'order ' + linkOrder.className.trim();
             linkOrder.className = linkOrder.className.trimStart();
@@ -98,69 +118,69 @@ function checkToken(){
 
 }
 
-function displayTable(data, page) {
-    tbody.innerHTML = ''; // Kosongkan isi tabel sebelum menampilkan data baru
-    const startIndex = (page - 1) * rowsPerPage;
-    const endIndex = startIndex + rowsPerPage;
-    const paginatedData = data.slice(startIndex, endIndex);
+// function displayTable(data, page) {
+//     tbody.innerHTML = ''; // Kosongkan isi tabel sebelum menampilkan data baru
+//     const startIndex = (page - 1) * rowsPerPage;
+//     const endIndex = startIndex + rowsPerPage;
+//     const paginatedData = data.slice(startIndex, endIndex);
 
-    if (paginatedData.length === 0 && data.length > 0) {
-        // Jika halaman saat ini kosong tetapi ada data, kembali ke halaman terakhir
-        currentPage = Math.ceil(data.length / rowsPerPage);
-        displayTable(data, currentPage);
-        return;
-    }
+//     if (paginatedData.length === 0 && data.length > 0) {
+//         // Jika halaman saat ini kosong tetapi ada data, kembali ke halaman terakhir
+//         currentPage = Math.ceil(data.length / rowsPerPage);
+//         displayTable(data, currentPage);
+//         return;
+//     }
 
-    paginatedData.forEach(item => {
-        const row = tbody.insertRow();
-        for (const key in item) {
-        const cell = row.insertCell();
-        cell.textContent = item[key];
-        }
-    });
-}
+//     paginatedData.forEach(item => {
+//         const row = tbody.insertRow();
+//         for (const key in item) {
+//         const cell = row.insertCell();
+//         cell.textContent = item[key];
+//         }
+//     });
+// }
 
-function displayPagination(data) {
-    paginationDiv.innerHTML = ''; // Kosongkan tombol pagination sebelumnya
-    const pageCount = Math.ceil(data.length / rowsPerPage);
+// function displayPagination(data) {
+//     paginationDiv.innerHTML = ''; // Kosongkan tombol pagination sebelumnya
+//     const pageCount = Math.ceil(data.length / rowsPerPage);
 
-    for (let i = 1; i <= pageCount; i++) {
-        const button = document.createElement('button');
-        button.classList.add('pagination-button');
-        button.textContent = i;
-        if (i === currentPage) {
-        button.classList.add('active');
-        }
-        button.addEventListener('click', () => {
-        currentPage = i;
-        displayTable(data, currentPage);
-        updateActiveButton();
-        });
-        paginationDiv.appendChild(button);
-    }
-}
+//     for (let i = 1; i <= pageCount; i++) {
+//         const button = document.createElement('button');
+//         button.classList.add('pagination-button');
+//         button.textContent = i;
+//         if (i === currentPage) {
+//         button.classList.add('active');
+//         }
+//         button.addEventListener('click', () => {
+//         currentPage = i;
+//         displayTable(data, currentPage);
+//         updateActiveButton();
+//         });
+//         paginationDiv.appendChild(button);
+//     }
+// }
 
-function updateActiveButton() {
-    const buttons = document.querySelectorAll('.pagination-button');
-    buttons.forEach(button => {
-        button.classList.remove('active');
-        if (parseInt(button.textContent) === currentPage) {
-        button.classList.add('active');
-        }
-    });
-}
+// function updateActiveButton() {
+//     const buttons = document.querySelectorAll('.pagination-button');
+//     buttons.forEach(button => {
+//         button.classList.remove('active');
+//         if (parseInt(button.textContent) === currentPage) {
+//         button.classList.add('active');
+//         }
+//     });
+// }
 
-function populateTableHeader(data) {
-    if (data.length > 0) {
-        const headers = Object.keys(data[0]);
-        const headerRow = thead.insertRow();
-        headers.forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-        });
-    }
-}
+// function populateTableHeader(data) {
+//     if (data.length > 0) {
+//         const headers = Object.keys(data[0]);
+//         const headerRow = thead.insertRow();
+//         headers.forEach(headerText => {
+//         const th = document.createElement('th');
+//         th.textContent = headerText;
+//         headerRow.appendChild(th);
+//         });
+//     }
+// }
 
 function checkScreenSize() {
     if (window.innerWidth <= '768') {
@@ -168,6 +188,23 @@ function checkScreenSize() {
         sidebar.classList.remove('hidden');
     } else {
         sidebar.classList.remove('hidden');
+    }
+}
+
+function showLoginError(errorMessage) {
+    const errorModal = document.getElementById('loginErrorModal');
+    const errorMessageElement = document.getElementById('loginErrorMessage');
+
+    if (errorModal && errorMessageElement) {
+        errorMessageElement.textContent = errorMessage; // Set pesan error
+
+        // Membuat instance modal Bootstrap
+        const modal = new bootstrap.Modal(errorModal);
+
+        // Menampilkan modal
+        modal.show();
+    } else {
+        console.error("Elemen modal error login tidak ditemukan.");
     }
 }
 
@@ -274,7 +311,7 @@ menuItems.forEach(item => {
                             };
             
                             // Kirim data ke PHP untuk disimpan
-                            fetch('http://localhost:3000/api/order', {
+                            fetch('/api/order', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -312,10 +349,10 @@ menuItems.forEach(item => {
 
                             const body = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
-                            fetch('http://localhost:3000/login', {
+                            fetch('/api/login', {
                                 method: 'POST',
                                 headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
+                                    'Content-Type': 'application/x-www-form-urlencoded',
                                 },
                                 body: body,
                             })
@@ -326,15 +363,22 @@ menuItems.forEach(item => {
                                 const token = getWithExpiry('userToken');
                                 if (token) {
                                     // console.log('Token masih berlaku:', token);
+                                    showLoginError('Already Logged In !');
                                 } else {
                                     // console.log('Token expired atau tidak ada');
-                                    setWithExpiry('userToken', data.token, 3600000);
-                                    checkToken();
+                                    // console.log(data);
+                                    if(!data.success){
+                                        showLoginError('Please check username and password !');
+                                    }else{
+                                        setWithExpiry('userToken', data.token, 3600000);
+                                        checkToken();
+                                    }
 
                                 }
                             })
                             .catch(error => {
                                 console.error('Error:', error);
+                                showLoginError(error);
                             });
                         });
                     }
@@ -347,6 +391,7 @@ menuItems.forEach(item => {
                                 url: 'json/data_order.json?_=' + new Date().getTime(),
                                 dataSrc: ''
                             },
+                            "autoWidth": false, //ikut lebar saat di hide toggle sidebar
                             columns: [
                                 { data: 'name', title: 'Nama' },
                                 { data: 'ktp', title: 'KTP' },
@@ -356,16 +401,25 @@ menuItems.forEach(item => {
                                 { data: 'detail', title: 'Detail' },
                                 { 
                                     data: 'ktp',
-                                    title: 'Action', 
+                                    title: 'Action',
+                                    width: '10%',
+                                    className: 'text-center',
                                     render: function ( data, type, row ) {
-                                        return data;
+
+                                        const rowJsonString = JSON.stringify(row);
+
+                                        // 2. Base64 encode string JSON
+                                        const base64EncodedRow = btoa(rowJsonString);
+
+                                        // 3. Buat URL dengan parameter Base64 encoded
+                                        const pdfUrl = `pages/surat_perjanjian.html?param=${encodeURIComponent(base64EncodedRow)}`;
+
+                                        
+                                        return '<a href="'+pdfUrl+'" target="_blank" class="btn btn-danger"><i class="fas fa-file-pdf"></i> PDF</a>';
+                                        // return data;
                                     }
                                 }
-                            ],
-                            // language: {
-                            //     url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/id.json'
-                            // }
-                            // ... (opsi DataTables lainnya)
+                            ]
                         });
                     });
                 }

@@ -12,6 +12,24 @@
 </head>
 <body>
 
+  <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title text-center" id="loginErrorModalLabel">Login Failed</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div id="loginErrorMessage"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Topbar -->
   <nav class="navbar bg-gradient-green bg-gradient-horizontal text-white">
     <button class="btn btn-outline-light mr-2" id="toggleSidebar">
@@ -30,7 +48,7 @@
     <div class="list-group list-group-flush">
       <a href="#" class="home list-group-item bg-gradient-green text-white active"><i class="fas fa-home mr-2"></i> <span class="d-none d-md-inline">Home</span></a>
       <a href="#" class="service list-group-item bg-gradient-green text-white"><i class="fas fa-user-cog mr-2"></i> <span class="d-none d-md-inline">Services</span></a>
-      <a href="#" class="order list-group-item bg-gradient-green text-white"><i class="fas fa-shopping-cart mr-2"></i> <span class="d-none d-md-inline">Order</span></a>
+      <a href="#" id="linkOrder" class="order list-group-item bg-gradient-green text-white"><i class="fas fa-shopping-cart mr-2"></i> <span class="d-none d-md-inline">Order</span></a>
       <!-- <a href="#" class="setting list-group-item bg-gradient-green text-white"><i class="fas fa-chart-bar mr-2"></i> <span class="d-none d-md-inline">Reports</span></a> -->
       <!-- Pemisah -->
       <hr class="my-1 border-white opacity-50">
