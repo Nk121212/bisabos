@@ -274,7 +274,7 @@ menuItems.forEach(item => {
                             };
             
                             // Kirim data ke PHP untuk disimpan
-                            fetch('api/backend/save_order.php', {
+                            fetch('http://localhost:3000/api/order', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
@@ -306,11 +306,18 @@ menuItems.forEach(item => {
                             e.preventDefault();
 
                             const form = e.target;
-                            const formData = new FormData(form);
+                            // const formData = new FormData(form);
+                            const username = form.querySelector('[name="username"]').value;
+                            const password = form.querySelector('[name="password"]').value;
 
-                            fetch('api/backend/login.php', {
+                            const body = `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+
+                            fetch('http://localhost:3000/login', {
                                 method: 'POST',
-                                body: formData
+                                headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: body,
                             })
                             .then(response => response.json())
                             .then(data => {

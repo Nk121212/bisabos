@@ -1,7 +1,0 @@
-{
-    "functions": {
-        "api/backend/**/*.php": {
-            "maxDuration": 100
-        }
-    }
-}

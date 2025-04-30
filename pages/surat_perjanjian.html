@@ -136,10 +136,12 @@
     </div>
 
     <div style="text-align:center;margin-top:10rem;">
-        <button type="submit" class="btn bg-gradient-green text-white w-100" onclick="downloadPDF()">
+        <button type="button" id="download-btn" class="btn bg-gradient-green text-white w-100" onclick="downloadHTMLasPDF()">
             <i class="fas fa-print"></i> Cetak
         </button>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
 
     <script>
         // Ambil semua parameter dari URL
@@ -155,35 +157,40 @@
         // document.getElementById('nama').textContent = nama || 'Tidak ada nama';
         // document.getElementById('tanggal').textContent = tanggal || 'Tidak ada tanggal';
 
-        function downloadPDF() {
-            const htmlContent = document.getElementById('cetakIni').innerHTML;
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'api/backend/generate_pdf.php', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.responseType = 'blob'; // Penting untuk menerima data biner (PDF)
+        function downloadHTMLasPDF() {
+            // const element = document.body; // Atau elemen HTML spesifik yang ingin Anda konversi
+            const element = document.getElementById('cetakIni');
 
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    const blob = new Blob([xhr.response], { type: 'application/pdf' });
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'dokumen.pdf'; // Nama file yang akan diunduh
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                } else {
-                    alert('Terjadi kesalahan saat membuat PDF.');
-                }
+            const namaFileDasar = 'surat_perjanjian_';
+            const now = new Date();
+            const tahun = now.getFullYear();
+            const bulan = String(now.getMonth() + 1).padStart(2, '0'); // Bulan dimulai dari 0
+            const tanggal = String(now.getDate()).padStart(2, '0');
+            const jam = String(now.getHours()).padStart(2, '0');
+            const menit = String(now.getMinutes()).padStart(2, '0');
+            const detik = String(now.getSeconds()).padStart(2, '0');
+
+            // Membuat nama file dengan format namafile_YYYYMMDD_HHMMSS
+            const namaFileLengkap = `${namaFileDasar}_${tahun}${bulan}${tanggal}_${jam}${menit}${detik}.pdf`;
+
+            const opt = {
+                margin:      10, // Atur margin di semua sisi (dalam mm)
+                filename:    namaFileLengkap,
+                image:       { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            xhr.onerror = function() {
-                alert('Kesalahan jaringan saat mengirim permintaan.');
-            };
+            // Tambahkan padding melalui CSS langsung ke elemen yang akan diunduh
+            element.style.padding = '10px'; // Contoh padding 20px di semua sisi
 
-            const params = 'htmlContent=' + encodeURIComponent(htmlContent);
-            xhr.send(params);
+            // Generate dan download PDF
+            html2pdf().from(element).set(opt).save();
+
+            // Hapus kembali padding setelah selesai (opsional)
+            setTimeout(() => {
+                element.style.padding = '';
+            }, 100);
         }
 
         
