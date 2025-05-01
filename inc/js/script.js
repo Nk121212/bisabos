@@ -129,7 +129,7 @@ function checkToken(){
     }else{
         //hide sidebar menu sign out
         linkLogout.classList.add('d-none');
-        linkLogin.classList.remove('d-none');
+        // linkLogin.classList.remove('d-none');
         // console.log('order_admin exist');
         if (linkOrder) {
             linkOrder.classList.remove('order_admin');
@@ -199,7 +199,7 @@ function kirimWhatsApp(pesan) {
     const nomor='6285161141305'
 
     const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
-    
+
     window.open(url, '_blank');
 
 }
